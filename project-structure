@@ -1,0 +1,87 @@
+src/
+├── backend/
+│   ├── config/
+│   │   ├── db.config.js
+│   │   ├── auth.config.js
+│   │   └── phonepe.config.js
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── user.controller.js
+│   │   ├── subscription.controller.js
+│   │   ├── property.controller.js
+│   │   ├── review.controller.js
+│   │   ├── admin.controller.js
+│   │   ├── finance.controller.js
+│   │   ├── brand.controller.js
+│   │   ├── construction.controller.js
+│   │   └── design.controller.js
+│   ├── middleware/
+│   │   ├── auth.jwt.js
+│   │   └── verifySignUp.js
+│   ├── models/
+│   │   ├── user.model.js
+│   │   ├── subscription.model.js
+│   │   ├── property.model.js
+│   │   ├── review.model.js
+│   │   ├── finance.model.js
+│   │   ├── brand.model.js
+│   │   ├── construction.model.js
+│   │   └── design.model.js
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── user.routes.js
+│   │   ├── subscription.routes.js
+│   │   ├── property.routes.js
+│   │   ├── review.routes.js
+│   │   ├── admin.routes.js
+│   │   ├── finance.routes.js
+│   │   ├── brand.routes.js
+│   │   ├── construction.routes.js
+│   │   └── design.routes.js
+│   ├── services/
+│   │   ├── upload.service.js
+│   │   └── payment.service.js
+│   └── server.js
+├── components/
+│   ├── layout/
+│   │   ├── Navbar.js
+│   │   ├── Footer.js
+│   │   └── Layout.js
+│   ├── home/
+│   │   ├── Hero.js
+│   │   ├── Services.js
+│   │   ├── Products.js
+│   │   └── Testimonials.js
+│   ├── services/
+│   │   ├── SmartPackages.js
+│   │   ├── BrandPromotion.js
+│   │   └── DesignSolutions.js
+│   ├── finance/
+│   │   ├── Calculator.js
+│   │   ├── LoanTypes.js
+│   │   └── ApplicationForm.js
+│   ├── auth/
+│   │   ├── Login.js
+│   │   └── Register.js
+│   └── shared/
+│       ├── SearchBar.js
+│       └── AnimatedCard.js
+├── pages/
+│   ├── Home.js
+│   ├── Services.js
+│   ├── Construction.js
+│   ├── Projects.js
+│   ├── Reviews.js
+│   ├── Agents.js
+│   ├── About.js
+│   ├── Contact.js
+│   └── admin/
+│       ├── Dashboard.js
+│       ├── Users.js
+│       ├── Properties.js
+│       ├── Reviews.js
+│       └── Subscriptions.js
+└── utils/
+    ├── animations.js
+    ├── api.js
+    └── dateUtils.js
