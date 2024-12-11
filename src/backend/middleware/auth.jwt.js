@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/auth.config');
 
 verifyToken = (req, res, next) => {
-  let token = req.headers['x-access-token'] || req.headers['authorization'];
+  let token = req.headers["x-access-token"] || req.headers["authorization"];
 
   if (!token) {
     return res.status(403).send({
@@ -22,25 +22,13 @@ verifyToken = (req, res, next) => {
       });
     }
     req.userId = decoded.id;
-    req.userType = decoded.type;
+    req.userRole = decoded.role;
     next();
-  });
-};
-
-isAdmin = (req, res, next) => {
-  if (req.userType === 'admin') {
-    next();
-    return;
-  }
-
-  res.status(403).send({
-    message: "Require Admin Role!"
   });
 };
 
 const authJwt = {
-  verifyToken,
-  isAdmin
+  verifyToken
 };
 
 module.exports = authJwt; 

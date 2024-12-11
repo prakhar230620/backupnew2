@@ -13,8 +13,7 @@ import {
 import {
   Search,
   LocationOn,
-  Add,
-  KeyboardArrowDown
+  Add
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -43,11 +42,13 @@ const Hero = () => {
 
   // Auto slide change
   React.useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % backgroundImages.length);
+    const interval = setInterval(() => {
+      setCurrentSlide((prevIndex) => 
+        (prevIndex + 1) % backgroundImages.length
+      );
     }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
 
   return (
     <Box 

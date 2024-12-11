@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Container, Grid, Typography, Box, Card, CardContent, Button,
-  TextField, IconButton, CircularProgress, Alert, Paper,
-  FormControl, InputLabel, Select, MenuItem
+  Container, Grid, Typography, Box, Button,
+  TextField, IconButton, CircularProgress,
+  FormControl, InputLabel, Select, MenuItem,
+  Paper
 } from '@mui/material';
 import { Upload, VideoLibrary, Close } from '@mui/icons-material';
 import { useDropzone } from 'react-dropzone';

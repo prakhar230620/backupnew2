@@ -1,55 +1,74 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
 import {
   Container,
   Paper,
-  Typography,
   TextField,
   Button,
-  Link,
+  Typography,
   Box,
+  Link,
   Alert
 } from '@mui/material';
-import { motion } from 'framer-motion';
-import api from '../../utils/api';
-
-const validationSchema = Yup.object({
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required')
-});
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const [error, setError] = useState('');
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    
     try {
-      const response = await api.post('/auth/signin', values);
-      localStorage.setItem('token', response.data.accessToken);
-      localStorage.setItem('user', JSON.stringify(response.data));
-      navigate('/dashboard');
+      const response = await axios.post('http://localhost:5001/api/auth/signin', formData);
+      
+      // Store the token and user data
+      localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('user', JSON.stringify({
+        id: response.data.id,
+        name: response.data.name,
+        email: response.data.email,
+        user_type: response.data.user_type
+      }));
+
+      console.log('Login successful:', response.data);
+
+      // Redirect based on user type
+      if (response.data.user_type === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred');
-    } finally {
-      setSubmitting(false);
+      console.error('Login error:', err);
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
       >
-        <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
-          <Typography variant="h4" align="center" gutterBottom>
+        <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
+          <Typography component="h1" variant="h5" align="center" gutterBottom>
             Login
           </Typography>
           
@@ -59,58 +78,47 @@ const Login = () => {
             </Alert>
           )}
 
-          <Formik
-            initialValues={{ email: '', password: '' }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ isSubmitting, touched, errors, handleChange, handleBlur }) => (
-              <Form>
-                <TextField
-                  fullWidth
-                  name="email"
-                  label="Email"
-                  type="email"
-                  margin="normal"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
-                />
-
-                <TextField
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  margin="normal"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.password && Boolean(errors.password)}
-                  helperText={touched.password && errors.password}
-                />
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  size="large"
-                  disabled={isSubmitting}
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  {isSubmitting ? 'Logging in...' : 'Login'}
-                </Button>
-              </Form>
-            )}
-          </Formik>
-
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Link href="/register" variant="body2">
-              Don't have an account? Sign Up
-            </Link>
-          </Box>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Box sx={{ textAlign: 'center' }}>
+              <Link href="/register" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Box>
+          </form>
         </Paper>
-      </motion.div>
+      </Box>
     </Container>
   );
 };

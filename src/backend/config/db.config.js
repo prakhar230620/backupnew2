@@ -1,15 +1,15 @@
 require('dotenv').config();
-const mysql = require('mysql2');
-const dbConfig = require('./db.config');
 
-const pool = mysql.createPool({
-  host: dbConfig.HOST,
-  user: dbConfig.USER,
-  password: dbConfig.PASSWORD,
-  database: dbConfig.DB,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
-
-module.exports = pool.promise(); 
+module.exports = {
+  HOST: process.env.DB_HOST || "localhost",
+  USER: process.env.DB_USER || "nir_user",
+  PASSWORD: process.env.DB_PASSWORD || "your_password",
+  DB: process.env.DB_NAME || "nir_real_estate",
+  dialect: "mysql",
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
+}; 

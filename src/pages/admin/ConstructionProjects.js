@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Paper,
@@ -60,18 +60,18 @@ const ConstructionProjects = () => {
     'On Hold'
   ];
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await axios.get('/api/admin/construction-projects');
       setProjects(response.data);
     } catch (error) {
       enqueueSnackbar('Error fetching projects', { variant: 'error' });
     }
-  };
+  }, [enqueueSnackbar]);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   const handleFileUpload = async (event) => {
     const files = Array.from(event.target.files);

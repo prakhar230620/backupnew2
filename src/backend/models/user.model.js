@@ -1,93 +1,50 @@
-const sql = require('../server');
+const db = require('../config/database');
 const bcrypt = require('bcryptjs');
 
-const User = function(user) {
-  this.name = user.name;
-  this.email = user.email;
-  this.mobile = user.mobile;
-  this.password = user.password;
-  this.user_type = user.user_type || 'user';
-};
-
-User.create = async (newUser, result) => {
-  try {
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    newUser.password = await bcrypt.hash(newUser.password, salt);
-
-    const query = "INSERT INTO users SET ?";
-    sql.query(query, newUser, (err, res) => {
-      if (err) {
-        console.log("Error: ", err);
-        result(err, null);
-        return;
+class User {
+  static async create(userData) {
+    try {
+      const [result] = await db.query(
+        'INSERT INTO users (name, email, password, mobile, user_type) VALUES (?, ?, ?, ?, ?)',
+        [userData.name, userData.email, userData.password, userData.mobile || null, 'user']
+      );
+      
+      return { 
+        id: result.insertId, 
+        ...userData,
+        user_type: 'user' 
+      };
+    } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        throw new Error('Email already exists');
       }
-      result(null, { id: res.insertId, ...newUser });
-    });
-  } catch (err) {
-    console.log("Error: ", err);
-    result(err, null);
+      throw err;
+    }
   }
-};
 
-User.findByEmail = (email, result) => {
-  sql.query("SELECT * FROM users WHERE email = ?", email, (err, res) => {
-    if (err) {
-      console.log("Error: ", err);
-      result(err, null);
-      return;
+  static async findByEmail(email) {
+    try {
+      const [rows] = await db.query(
+        'SELECT * FROM users WHERE email = ?',
+        [email]
+      );
+      return rows[0];
+    } catch (err) {
+      throw err;
     }
-    if (res.length) {
-      result(null, res[0]);
-      return;
+  }
+
+  static async findById(id) {
+    try {
+      const [rows] = await db.query(
+        'SELECT user_id, name, email, mobile, user_type FROM users WHERE user_id = ?',
+        [id]
+      );
+      return rows[0];
+    } catch (err) {
+      throw err;
     }
-    result({ kind: "not_found" }, null);
-  });
-};
-
-User.findById = (userId, result) => {
-  sql.query(
-    `SELECT user_id, name, email, mobile, user_type, created_at 
-     FROM users WHERE user_id = ?`, 
-    userId,
-    (err, res) => {
-      if (err) {
-        console.log("Error: ", err);
-        result(err, null);
-        return;
-      }
-
-      if (res.length) {
-        result(null, res[0]);
-        return;
-      }
-
-      result({ kind: "not_found" }, null);
-    }
-  );
-};
-
-User.updateById = (userId, user, result) => {
-  sql.query(
-    "UPDATE users SET name = ?, mobile = ? WHERE user_id = ?",
-    [user.name, user.mobile, userId],
-    (err, res) => {
-      if (err) {
-        console.log("Error: ", err);
-        result(err, null);
-        return;
-      }
-
-      if (res.affectedRows == 0) {
-        result({ kind: "not_found" }, null);
-        return;
-      }
-
-      result(null, { userId: userId, ...user });
-    }
-  );
-};
-
-// Add more methods as needed
+  }
+}
 
 module.exports = User; 

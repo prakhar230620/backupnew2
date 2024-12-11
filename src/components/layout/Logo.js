@@ -12,42 +12,32 @@ const Logo = () => {
 
   return (
     <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-      <Box sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: 2,  // Increased gap between logo and text
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2,
         '&:hover': {
           opacity: 0.9
         }
       }}>
-        {/* Option 1: Use SVG Logo */}
-        <img 
-          src={svgLogo}
-          alt="NIR Logo"
-          style={{
-            height: '45px',
-            width: '45px',
-            objectFit: 'contain'
-          }}
-        />
-
-        {/* Option 2: Use PNG/JPG Logo (uncomment this and comment out Option 1) */}
-        {/* <Box
-          component="img"
-          src={`${process.env.PUBLIC_URL}/images/logo.png`}
-          alt="NIR Logo"
-          sx={{
-            height: '45px',
-            width: '45px',
-            objectFit: 'contain',
-            borderRadius: '50%'  // If you want circular logo
-          }}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = svgLogo; // Fallback to SVG if image fails to load
-          }}
-        /> */}
-
+        {/* Option 2: Using PNG/JPG Logo */}
+<Box
+  component="img"
+  src={`${process.env.PUBLIC_URL}/images/logo.png`}
+  alt="NIR Logo"
+  sx={{
+    height: '45px',
+    width: '45px',
+    objectFit: 'cover',
+    borderRadius: '8px', // यहाँ नंबर को बदलकर आप कॉर्नर की राउंडनेस को एडजस्ट कर सकते हैं
+    border: '2px solid #1976d2', // Optional: adds a border
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)' // Optional: adds subtle shadow
+  }}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = svgLogo;
+  }}
+/>
         <Typography
           variant="h6"
           sx={{
@@ -57,8 +47,8 @@ const Logo = () => {
             display: { xs: 'none', sm: 'block' },
             letterSpacing: '0.5px',
             textTransform: 'none',
-            fontSize: '1.2rem',  // Slightly smaller text
-            marginLeft: 1  // Extra spacing from logo
+            fontSize: '1.2rem',
+            marginLeft: 1
           }}
         >
           The Next Innovation Reality
@@ -68,4 +58,4 @@ const Logo = () => {
   );
 };
 
-export default Logo; 
+export default Logo;

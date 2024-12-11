@@ -1,20 +1,17 @@
-const { verifySignUp } = require("../middleware");
-const controller = require("../controllers/auth.controller");
+const express = require('express');
+const router = express.Router();
+const { check } = require('express-validator');
+const authController = require('../controllers/auth.controller');
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers",
-      "x-access-token, Origin, Content-Type, Accept"
-    );
-    next();
-  });
+router.post('/signup', [
+  check('name').notEmpty().withMessage('Name is required'),
+  check('email').isEmail().withMessage('Please provide a valid email'),
+  check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+], authController.signup);
 
-  app.post(
-    "/api/auth/signup",
-    [verifySignUp.checkDuplicateEmail],
-    controller.signup
-  );
+router.post('/signin', [
+  check('email').isEmail().withMessage('Please provide a valid email'),
+  check('password').notEmpty().withMessage('Password is required')
+], authController.signin);
 
-  app.post("/api/auth/signin", controller.signin);
-}; 
+module.exports = router; 

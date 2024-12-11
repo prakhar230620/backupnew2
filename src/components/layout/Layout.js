@@ -26,8 +26,8 @@ const Layout = ({ children }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         sx={{
-          flexGrow: 1,
-          py: { xs: 4, md: 6 },
+          flexGrow: 2,
+          py: { xs: 4, md: 12 },
           bgcolor: theme.palette.background.default
         }}
       >
@@ -43,6 +43,7 @@ const Layout = ({ children }) => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
         sx={{
+          text:'THE NEW INNOVATION REALITY',
           position: 'fixed',
           bottom: theme.spacing(4),
           right: theme.spacing(4),
